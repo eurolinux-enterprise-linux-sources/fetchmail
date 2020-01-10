@@ -3,7 +3,7 @@
 Summary: A remote mail retrieval and forwarding utility
 Name: fetchmail
 Version: 6.3.24
-Release: 5%{?dist}
+Release: 7%{?dist}
 Source0: http://download.berlios.de/fetchmail/fetchmail-%{version}.tar.xz
 Source1: http://download.berlios.de/fetchmail/fetchmail-%{version}.tar.xz.asc
 URL: http://fetchmail.berlios.de/
@@ -13,6 +13,11 @@ Group: Applications/Internet
 BuildRequires: gettext-devel hesiod-devel krb5-devel openssl-devel
 # Patch0: already upstream
 Patch0: fetchmail-6.3.24-data-loss.patch
+# Patch1: already upstream
+Patch1: fetchmail-6.3.24-ssl-backport.patch
+# Patch2: already upstream
+Patch2: fetchmail-6.3.24-options-usage-manpage.patch
+Patch3: fetchmail-6.3.24-sslv3-in-ssllib-check.patch
 
 %description
 Fetchmail is a remote mail retrieval and forwarding utility intended
@@ -28,6 +33,9 @@ connections.
 %prep
 %setup -q
 %patch0 -p1 -b .data-loss
+%patch1 -p1 -b .ssl-backport
+%patch2 -p1 -b .options-usage-manpage
+%patch3 -p1 -b .sslv3-in-ssllib-check
 
 %build
 %configure --enable-POP3 --enable-IMAP --with-ssl --with-hesiod \
@@ -52,6 +60,17 @@ rm -f $RPM_BUILD_ROOT%{python_sitelib}/fetchmailconf.py*
 %{_mandir}/man1/fetchmail.1*
 
 %changelog
+* Wed Jun 14 2017 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.24-7
+- Fix checking for availability of SSLv3 in openssl library
+  Resolves: #1458917
+
+* Wed Mar 08 2017 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.24-6
+- Fix bogus dates in the %%changelog
+- Backport better SSL protocol support and documentation
+  Resolves: #1273016
+- Minor fixes in options, usage message and man page
+  Resolves: #949013
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 6.3.24-5
 - Mass rebuild 2014-01-24
 
@@ -157,7 +176,7 @@ rm -f $RPM_BUILD_ROOT%{python_sitelib}/fetchmailconf.py*
 * Wed Dec  3 2008 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.9-1
 - Update to fetchmail-6.3.9
 
-* Tue Sep 18 2008 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.8-8
+* Thu Sep 18 2008 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.8-8
 - Rediff all patches to work with patch --fuzz=0
 - Replace server(smtp) requires by procmail
   Resolves: #66396
@@ -321,7 +340,7 @@ rm -f $RPM_BUILD_ROOT%{python_sitelib}/fetchmailconf.py*
 * Tue Sep 23 2003 Florian La Roche <Florian.LaRoche@redhat.de>
 - allow compiling without hesiod
 
-* Tue Jun 22 2003 Nalin Dahyabhai <nalin@redhat.com> 6.2.0-6
+* Tue Jun 24 2003 Nalin Dahyabhai <nalin@redhat.com> 6.2.0-6
 - rebuild
 
 * Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
