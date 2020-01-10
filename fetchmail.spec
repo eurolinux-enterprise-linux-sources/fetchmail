@@ -3,7 +3,7 @@
 Summary: A remote mail retrieval and forwarding utility
 Name: fetchmail
 Version: 6.3.24
-Release: 3%{?dist}
+Release: 5%{?dist}
 Source0: http://download.berlios.de/fetchmail/fetchmail-%{version}.tar.xz
 Source1: http://download.berlios.de/fetchmail/fetchmail-%{version}.tar.xz.asc
 URL: http://fetchmail.berlios.de/
@@ -52,6 +52,12 @@ rm -f $RPM_BUILD_ROOT%{python_sitelib}/fetchmailconf.py*
 %{_mandir}/man1/fetchmail.1*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 6.3.24-5
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 6.3.24-4
+- Mass rebuild 2013-12-27
+
 * Thu Apr 25 2013 Vitezslav Crhonek <vcrhonek@redhat.com> - 6.3.24-3
 - Fix fetchmail loses last line of message if the non-default "mimedecode" option
   is enabled and if that line is not properly terminated
